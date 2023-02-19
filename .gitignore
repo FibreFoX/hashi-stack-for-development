@@ -1,0 +1,3 @@
+.dev/packer/output-debainbase
+.dev/proxmox/.vagrant
+.dev/proxmox/proxmox-image

@@ -1,0 +1,28 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "proxmox"
+  
+  # otherwise you will get nagged about SMB-login credentials when "vagrant up"
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  config.vm.provider "hyperv" do |h|
+      h.enable_virtualization_extensions = true
+      h.linked_clone = true
+      # there will be a lot of things running, give it some space
+      h.memory = 4096
+  end
+
+  # some required "corrections" to make the system usable
+  config.vm.provision "shell", inline: <<-SHELL
+    # remove last line, as it is not correct for this new VM
+    head -n -1 /etc/hosts | tee /etc/hosts
+    # add "current" correct host entry
+    echo "$(hostname -I | cut -f1 -d' ') $(hostname -s) $(hostname)" | tee -a /etc/hosts
+
+    # set a known root password for PVE login later
+    # https://arkit.co.in/four-ways-non-interactively-set-passwords-linux/
+    echo -e "development\ndevelopment" | passwd root
+  SHELL
+end
