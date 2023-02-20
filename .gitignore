@@ -1,3 +1,4 @@
 .dev/packer/output-debainbase
 .dev/proxmox/.vagrant
 .dev/proxmox/proxmox-image
+.dev/proxmox/debian_lxc_image

@@ -92,12 +92,13 @@ You should get greeted with something like this:
 ...
 ... (this REALLY can take a long time, around 15 - 20 minutes, including several reboots of the VM)
 ...
-==> hashi-stack-for-development.vagrant.debainbase: Packaging box...
+==> hashi-stack-proxmox.vagrant.debainbase: Downloading /tmp/debian_lxc_image => debian_lxc_image
+==> hashi-stack-proxmox.vagrant.debainbase: Packaging box...
 ```
 
-This should create a vagrant box file around 2.5 GB in size.
+This should create a vagrant box file around 2.8 GB in size. In addition to that a file called `debian_lxc_image` is created which contains the actual downloaded LXC image filename, which will be used later. So no guesswork needed, as this might change with time.
 
-After the creation time, import the box and create the VM using Vagrant:
+After the creating the box image, import it and create the VM using Vagrant:
 
 ```ps
 vagrant box add --force proxmox ./proxmox-image/package.box

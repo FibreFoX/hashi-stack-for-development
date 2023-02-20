@@ -102,6 +102,8 @@ build {
       "set -ex",
       # finally install ProxmoxVE
       "sudo -E apt-get install -y proxmox-ve postfix open-iscsi",
+      # it is possible that some packages need updates that are coming from the proxmox repository (happened to me)
+      "sudo -E apt-get upgrade -y",
       "sudo -E apt-get clean",
     ]
   }
@@ -114,6 +116,20 @@ build {
       "sudo pveam update",
       "export LATEST_DEBIAN_LXC_IMAGE=$(sudo pveam available | fgrep debian-11-standard | awk '{print $2}')",
       "sudo -E pveam download local $LATEST_DEBIAN_LXC_IMAGE",
+      "echo \"$LATEST_DEBIAN_LXC_IMAGE\" | tee /tmp/debian_lxc_image"
     ]
   }
+
+  # for later reference in other scripts, store information about the embedded Debian LXC image
+  provisioner "file" {
+    source      = "/tmp/debian_lxc_image"
+    destination = "debian_lxc_image"
+    direction   = "download"
+  }
+
+  # there is no need for "vagrant" post-processor, as this is part of the builder
+  # took me some time initially to fight in the beginning
+  # as per RTFM https://developer.hashicorp.com/packer/plugins/builders/vagrant#vagrant-builder
+  # "Please note that if you are using the Vagrant builder, then the Vagrant post-processor is unnecesary
+  # because the output of the Vagrant builder is already a Vagrant box".
 }
