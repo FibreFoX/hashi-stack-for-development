@@ -12,6 +12,7 @@ Vagrant.configure("2") do |config|
       h.linked_clone = true
       # there will be a lot of things running, give it some space
       h.memory = 4096
+      h.cpus = 4
   end
 
   # some required "corrections" to make the system usable
