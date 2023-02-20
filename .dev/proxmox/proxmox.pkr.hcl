@@ -111,9 +111,9 @@ build {
     inline = [
       "set -ex",
       # finally install ProxmoxVE
-      "pveam update",
-      "export LATEST_DEBIAN_LXC_IMAGE=$(pveam available | fgrep debian-11-standard | awk '{print $2}')"
-      "pveam download local $LATEST_DEBIAN_LXC_IMAGE",
+      "sudo pveam update",
+      "export LATEST_DEBIAN_LXC_IMAGE=$(sudo pveam available | fgrep debian-11-standard | awk '{print $2}')",
+      "sudo -E pveam download local $LATEST_DEBIAN_LXC_IMAGE",
     ]
   }
 }
