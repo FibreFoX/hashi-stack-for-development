@@ -73,6 +73,12 @@ choco install consul docker-desktop nomad packer vagrant
 
 Of course a restart is required (mostly due to Vagrant).
 
+After the restart, the following steps for Vagrant need to be executed:
+
+```ps
+vagrant plugin install vagrant-scp
+```
+
 ### Step 1 - Build the Proxmox VE base image (using Packer and Vagrant)
 
 As the ProxmoxVE VM is getting created via Vagrant, it would be a waste of time to always recreate the whole VM, so we create an image first via Packer:
@@ -104,3 +110,31 @@ After the creating the box image, import it and create the VM using Vagrant:
 vagrant box add --force proxmox ./proxmox-image/package.box
 vagrant up --provision
 ```
+
+After some boot time, we need to get some stuff for nexts steps.
+
+```ps
+vagrant scp :/home/vagrant/proxmox.tfvars ../proxmox.auto.tfvars
+vagrant scp :/home/vagrant/debian_lxc_image.tfvars ../debian_lxc_image.auto.tfvars
+```
+
+Keep in mind: **it is AN INSECURE SETUP!** For tinkering it might work, for professional use, please, create a proper token for separate user, like described at the [proxmox Terraform-provider](https://registry.terraform.io/providers/Telmate/proxmox/latest/docs#creating-the-proxmox-user-and-role-for-terraform). Keep in mind [state files can be a sensitive file too](https://developer.hashicorp.com/terraform/language/state/sensitive-data#recommendations).
+
+### Step 2 - The first LXC containers (using Terraform)
+
+Security in a cluster is key, so lets create the first two containers that hold some important tools.
+
+```ps
+# back to the .dev folder
+cd ..
+# yes, "cp" even works on windows (powershell)
+cp proxmox.auto.tfvars ./step-ca/proxmox.auto.tfvars
+cp debian_lxc_image.auto.tfvars ./step-ca/debian_lxc_image.auto.tfvars
+cd step-ca
+# to get all plugins
+terraform init
+# check what would get changed (and if a connection can be established)
+terraform plan
+```
+
+
