@@ -116,15 +116,9 @@ build {
       "sudo pveam update",
       "export LATEST_DEBIAN_LXC_IMAGE=$(sudo pveam available | fgrep debian-11-standard | awk '{print $2}')",
       "sudo -E pveam download local $LATEST_DEBIAN_LXC_IMAGE",
-      "echo \"$LATEST_DEBIAN_LXC_IMAGE\" | tee /tmp/debian_lxc_image"
+      # for later reference in other scripts, store information about the embedded Debian LXC image
+      "echo \"debian_lxc_image = \\\"local:vztmpl/${LATEST_DEBIAN_LXC_IMAGE}\\\"\" | tee /home/vagrant/debian_lxc_image.tfvars"
     ]
-  }
-
-  # for later reference in other scripts, store information about the embedded Debian LXC image
-  provisioner "file" {
-    source      = "/tmp/debian_lxc_image"
-    destination = "debian_lxc_image"
-    direction   = "download"
   }
 
   # there is no need for "vagrant" post-processor, as this is part of the builder
