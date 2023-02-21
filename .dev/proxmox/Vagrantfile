@@ -37,7 +37,7 @@ Vagrant.configure("2") do |config|
     # DO NOT USE THIS IN PRODUCTION !!!
     # DO NOT USE THIS IN PRODUCTION !!!
     # it is a "lazy" workaround to not have so much configured
-    echo "pm_api_url = \"http://$(hostname -I | cut -f1 -d' '):8006/api2/json\"" | tee /home/vagrant/proxmox.tfvars > /dev/null
+    echo "pm_api_url = \"https://$(hostname -I | cut -f1 -d' '):8006/api2/json\"" | tee /home/vagrant/proxmox.tfvars > /dev/null
     echo "pm_user = \"root@pam\"" | tee -a /home/vagrant/proxmox.tfvars > /dev/null
     echo "pm_password = \"${ROOT_PWD}\"" | tee -a /home/vagrant/proxmox.tfvars > /dev/null
   SHELL
